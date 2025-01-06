@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from "@angular/core";
+import { Component, Input, OnDestroy, HostListener } from "@angular/core";
 import { ArticlesService } from "../../core/services/articles.service";
 import { ArticleListConfig } from "../../core/models/article-list-config.model";
 import { Article } from "../../core/models/article.model";
@@ -18,10 +18,10 @@ import { takeUntil } from "rxjs/operators";
 export class ArticleListComponent implements OnDestroy {
   query!: ArticleListConfig;
   results: Article[] = [];
-  currentPage = 1;
-  totalPages: Array<number> = [];
+  currentOffset = 0;
   loading = LoadingState.NOT_LOADED;
   LoadingState = LoadingState;
+  allArticlesLoaded = false;
   destroy$ = new Subject<void>();
 
   @Input() limit!: number;
@@ -29,31 +29,37 @@ export class ArticleListComponent implements OnDestroy {
   set config(config: ArticleListConfig) {
     if (config) {
       this.query = config;
-      this.currentPage = 1;
+      this.currentOffset = 0;
+      this.results = [];
+      this.allArticlesLoaded = false;
       this.runQuery();
     }
   }
 
-  constructor(private articlesService: ArticlesService) {}
+  constructor(private readonly articlesService: ArticlesService) {}
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  setPageTo(pageNumber: number) {
-    this.currentPage = pageNumber;
-    this.runQuery();
+  @HostListener("window:scroll", [])
+  onScroll() {
+    if (
+      !this.allArticlesLoaded &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+      this.loading !== LoadingState.LOADING
+    ) {
+      this.runQuery();
+    }
   }
 
   runQuery() {
     this.loading = LoadingState.LOADING;
-    this.results = [];
 
-    // Create limit and offset filter (if necessary)
     if (this.limit) {
       this.query.filters.limit = this.limit;
-      this.query.filters.offset = this.limit * (this.currentPage - 1);
+      this.query.filters.offset = this.currentOffset;
     }
 
     this.articlesService
@@ -61,13 +67,13 @@ export class ArticleListComponent implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         this.loading = LoadingState.LOADED;
-        this.results = data.articles;
 
-        // Used from http://www.jstips.co/en/create-range-0...n-easily-using-one-line/
-        this.totalPages = Array.from(
-          new Array(Math.ceil(data.articlesCount / this.limit)),
-          (val, index) => index + 1
-        );
+        if (data.articles.length) {
+          this.results = [...this.results, ...data.articles];
+          this.currentOffset += this.limit;
+        } else {
+          this.allArticlesLoaded = true;
+        }
       });
   }
 }

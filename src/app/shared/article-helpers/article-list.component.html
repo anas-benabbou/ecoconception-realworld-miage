@@ -1,27 +1,23 @@
 <app-article-preview *ngFor="let article of results" [article]="article">
 </app-article-preview>
 
+<!-- Message de chargement pour les nouveaux articles -->
 <div class="article-preview" *ngIf="loading === LoadingState.LOADING">
-  Loading articles...
+  Loading more articles...
 </div>
 
+<!-- Message lorsque tous les articles ont été chargés -->
 <div
   class="article-preview"
-  *ngIf="loading === LoadingState.LOADED && !results.length"
+  *ngIf="allArticlesLoaded && loading === LoadingState.LOADED"
+>
+  All articles have been loaded.
+</div>
+
+<!-- Message lorsque aucun article n'est disponible -->
+<div
+  class="article-preview"
+  *ngIf="!results.length && loading === LoadingState.LOADED"
 >
   No articles are here... yet.
 </div>
-
-<nav *ngIf="loading === LoadingState.LOADED && totalPages.length > 1">
-  <ul class="pagination">
-    <li
-      class="page-item"
-      [ngClass]="{ active: pageNumber === currentPage }"
-      *ngFor="let pageNumber of totalPages"
-    >
-      <button class="page-link" (click)="setPageTo(pageNumber)">
-        {{ pageNumber }}
-      </button>
-    </li>
-  </ul>
-</nav>
