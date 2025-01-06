@@ -1,20 +1,10 @@
 <app-article-preview *ngFor="let article of results" [article]="article">
 </app-article-preview>
 
-<!-- Message de chargement pour les nouveaux articles -->
 <div class="article-preview" *ngIf="loading === LoadingState.LOADING">
   Loading more articles...
 </div>
 
-<!-- Message lorsque tous les articles ont été chargés -->
-<div
-  class="article-preview"
-  *ngIf="allArticlesLoaded && loading === LoadingState.LOADED"
->
-  All articles have been loaded.
-</div>
-
-<!-- Message lorsque aucun article n'est disponible -->
 <div
   class="article-preview"
   *ngIf="!results.length && loading === LoadingState.LOADED"
