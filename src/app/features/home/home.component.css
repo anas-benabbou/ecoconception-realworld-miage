@@ -5,3 +5,32 @@
 .tag-pill {
   cursor: pointer;
 }
+.gif-background {
+  position: absolute;
+  right: 0;
+  width: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: -1;
+}
+
+.gif-background img {
+  width: 250px;
+  height: 150px;
+  object-fit: cover;
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
