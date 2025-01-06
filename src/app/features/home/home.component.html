@@ -1,18 +1,41 @@
 <div class="home-page animated-gif-bg">
   <div class="banner" *appShowAuthed="false">
     <div class="container">
-      <h1 class="logo-font">conduit</h1>
-      <p>A place to share your <i>Angular</i> knowledge.</p>
+      <h1
+        class="logo-font"
+        style="
+          font-size: 50px;
+          color: #ff00ff;
+          text-shadow: 3px 3px 0px #0000ff;
+        "
+      >
+        conduit
+      </h1>
+      <p
+        style="
+          font-size: 24px;
+          font-weight: bold;
+          color: #ff007f;
+          text-shadow: 2px 2px 5px #ffff00;
+        "
+      >
+        A place to share your <i style="color: #ff6600">Angular</i> knowledge.
+      </p>
     </div>
   </div>
 
   <div class="video-container">
-    <video autoplay loop controls>
+    <video
+      autoplay
+      loop
+      controls
+      style="border: 5px solid #ff0000; box-shadow: 0px 0px 20px 10px #00ff00"
+    >
       <source
         src="../../../assets/haida miloudi taha et MIDO.mp4"
         type="video/mp4"
       />
-      Votre navigateur ne prend pas en charge la vidéo hhhhhiuhbviuerb iuerbv .
+      Votre navigateur ne prend pas en charge la vidéo hhhhhiuhbviuerb iuerbv.
     </video>
   </div>
 
@@ -26,6 +49,11 @@
                 class="nav-link"
                 [ngClass]="{ active: listConfig.type === 'feed' }"
                 (click)="setListTo('feed')"
+                style="
+                  color: #ff00ff;
+                  font-size: 20px;
+                  animation: pulsate 1.5s infinite;
+                "
               >
                 Your Feed
               </a>
@@ -37,13 +65,26 @@
                   active: listConfig.type === 'all' && !listConfig.filters.tag
                 }"
                 (click)="setListTo('all')"
+                style="
+                  color: #ff0000;
+                  font-size: 22px;
+                  animation: pulsate 2s infinite;
+                "
               >
                 Global Feed
               </a>
             </li>
             <li class="nav-item" [hidden]="!listConfig.filters.tag">
-              <a class="nav-link active">
-                <i class="ion-pound"></i> {{ listConfig.filters.tag }}
+              <a
+                class="nav-link active"
+                style="
+                  color: #00ff00;
+                  font-size: 18px;
+                  animation: pulsate 1.8s infinite;
+                "
+              >
+                <i class="ion-pound" style="color: #ff00ff"></i>
+                {{ listConfig.filters.tag }}
               </a>
             </li>
           </ul>
@@ -54,13 +95,19 @@
 
       <div class="col-md-3" *rxLet="tags$; let tags">
         <div class="sidebar">
-          <p>Popular Tags</p>
+          <p style="color: #ff6600; font-size: 30px">Popular Tags</p>
 
           <div class="tag-list">
             <a
               *ngFor="let tag of tags"
               (click)="setListTo('all', { tag: tag })"
               class="tag-default tag-pill weird-tag"
+              style="
+                background-color: #ffff00;
+                border: 3px solid #ff00ff;
+                font-size: 1.5rem;
+                font-weight: bold;
+              "
             >
               {{ tag }}
             </a>
@@ -71,26 +118,32 @@
           <div [hidden]="!tagsLoaded || tags.length > 0">
             No tags are here... yet.
           </div>
+
           <div class="gif-background">
             <img
               src="https://media.giphy.com/media/gtakVlnStZUbe/giphy.gif?cid=ecf05e47wbgvvk6lhdjucggefhd5ds2ynbzkxvh6lya7azub&ep=v1_gifs_search&rid=giphy.gif&ct=g"
               alt="gif1"
+              style="animation: rotate 5s linear infinite"
             />
             <img
               src="https://media.giphy.com/media/1dIo6kDOPMzsnMOJTj/giphy.gif?cid=790b761176xkzvksp0v4gols3xq6hypkwo89hz46td9xdf6c&ep=v1_gifs_search&rid=giphy.gif&ct=g"
               alt="gif2"
+              style="animation: rotate 5s linear infinite"
             />
             <img
               src="https://media.giphy.com/media/IzdL5AH7teZSOPnqrw/giphy.gif?cid=ecf05e47uxsa6pd1nahccqqir5osadr9dvjp3jocdfin5fyb&ep=v1_gifs_search&rid=giphy.gif&ct=g"
               alt="gif3"
+              style="animation: rotate 5s linear infinite"
             />
             <img
               src="https://media.giphy.com/media/a5viI92PAF89q/giphy.gif?cid=ecf05e47un8nhcyrlvpc8cicqzi0sjqw4hzkoe6d5rs44hhz&ep=v1_gifs_search&rid=giphy.gif&ct=g"
-              alt="gif1"
+              alt="gif4"
+              style="animation: rotate 5s linear infinite"
             />
             <img
               src="https://media.giphy.com/media/pUeXcg80cO8I8/giphy.gif?cid=ecf05e47dfjp6qu44o8hbp0yyi3nr5kqoctvcip1x79wl05c&ep=v1_gifs_search&rid=giphy.gif&ct=g"
-              alt="gif2"
+              alt="gif5"
+              style="animation: rotate 5s linear infinite"
             />
           </div>
         </div>
@@ -100,17 +153,32 @@
 
   <!-- CSS dans le fichier HTML -->
   <style>
-    .nav-link {
-      cursor: pointer;
+    @keyframes pulsate {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+        color: #ff6600;
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
-    .tag-pill {
-      cursor: pointer;
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .gif-background {
       position: absolute;
       right: 0;
+      top: 40%;
       width: 200px;
       height: auto;
       display: flex;
@@ -123,19 +191,6 @@
       width: 250px;
       height: 150px;
       object-fit: cover;
-      animation: float 5s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-      100% {
-        transform: translateY(0);
-      }
     }
 
     div.tag-list > a.weird-tag {
@@ -145,20 +200,13 @@
       border-color: #0000ff;
       font-size: 1.2rem;
       font-weight: bold;
-      padding-top: 5px;
-      padding-right: 10px;
-      padding-bottom: 5px;
-      padding-left: 10px;
-      margin-top: 5px;
-      margin-right: 5px;
-      margin-bottom: 5px;
-      margin-left: 5px;
+      padding: 10px;
+      margin: 10px;
       display: inline-block;
       border-radius: 20px;
       color: #ffff00;
       text-shadow: 2px 2px 0 #ff0000;
-      transition-property: transform, background-color;
-      transition-duration: 0.3s, 0.5s;
+      transition: transform 0.3s, background-color 0.5s;
     }
 
     div.tag-list > a.weird-tag:hover {
@@ -167,30 +215,6 @@
       color: #000000;
       box-shadow: 0px 0px 20px 5px #00ff00;
       cursor: pointer;
-    }
-
-    @keyframes useless-bounce-animation {
-      0% {
-        transform: translateY(0px);
-      }
-      25% {
-        transform: translateY(-5px);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-      75% {
-        transform: translateY(-5px);
-      }
-      100% {
-        transform: translateY(0px);
-      }
-    }
-
-    div.tag-list > a.weird-tag {
-      animation-name: useless-bounce-animation;
-      animation-duration: 1s;
-      animation-iteration-count: infinite;
     }
 
     .video-container {
@@ -203,6 +227,7 @@
       max-width: 800px;
       height: auto;
       border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
     }
   </style>
 </div>
