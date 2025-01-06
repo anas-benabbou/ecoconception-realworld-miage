@@ -74,25 +74,21 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.errors = { errors: {} };
 
-    let observable =
-      this.authType === "login"
-        ? this.userService.login(
-            this.authForm.value as { email: string; password: string }
-          )
-        : this.userService.register(
-            this.authForm.value as {
-              email: string;
-              password: string;
-              username: string;
-            }
-          );
+    const retryFailedLogin = () => {
+      this.userService
+        .login(this.authForm.value as { email: string; password: string })
+        .subscribe({
+          next: () => {
+            // Navigate on successful login
+            this.router.navigate(["/"]);
+          },
+          error: () => {
+            // Retry immediately on failure (no circuit breaker)
+            retryFailedLogin();
+          },
+        });
+    };
 
-    observable.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => void this.router.navigate(["/"]),
-      error: (err) => {
-        this.errors = err;
-        this.isSubmitting = false;
-      },
-    });
+    retryFailedLogin();
   }
 }
